@@ -31,7 +31,7 @@ public class ProdutoController {
     public ResponseEntity<List<ProdutoModel>> pegarProdutosPorMarca(@RequestParam(name = "marca", required = false) String filtroMarca){
 
         List<ProdutoModel> produtos;
-
+        // validação
         if(filtroMarca != null && !filtroMarca.isBlank()){
             produtos = produtoRepositories.findByMarca(filtroMarca);
         }else {
