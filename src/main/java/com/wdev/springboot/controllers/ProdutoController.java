@@ -12,7 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @RestController
 public class ProdutoController {
@@ -38,6 +40,17 @@ public class ProdutoController {
             produtos = produtoRepositories.findAll();
         }
         return ResponseEntity.status(HttpStatus.OK).body(produtos);
+    }
+    @GetMapping("/produtos/{id}")
+    public ResponseEntity<Object> pegarUmProduto(@PathVariable(value = "id") UUID id){
+
+        Optional<ProdutoModel> produto = produtoRepositories.findById(id);
+
+        if(produto.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não localizado");
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(produto.get());
+
     }
 
 
