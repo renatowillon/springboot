@@ -71,5 +71,16 @@ public class ProdutoController {
 
     }
 
+    @DeleteMapping("produtos/{id}")
+    public ResponseEntity<Object> deletarProduto(@PathVariable(value = "id") UUID id){
+        Optional<ProdutoModel> produto = produtoRepositories.findById(id);
+
+        if(produto.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não localizado");
+        }
+        produtoRepositories.delete(produto.get());
+        return ResponseEntity.status(HttpStatus.OK).body("Produto deletado com sucesso.");
+    }
+
 
 }
