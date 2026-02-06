@@ -41,6 +41,7 @@ public class ProdutoController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(produtos);
     }
+
     @GetMapping("/produtos/{id}")
     public ResponseEntity<Object> pegarUmProduto(@PathVariable(value = "id") UUID id){
 
@@ -53,7 +54,22 @@ public class ProdutoController {
 
     }
 
+    @PutMapping("/produtos/{id}")
+    public ResponseEntity<Object> atualizaProduto(@PathVariable(value = "id") UUID id,
+                                                  @RequestBody @Valid ProdutosRecordDto produtosRecordDto){
+        Optional<ProdutoModel> produto = produtoRepositories.findById(id);
 
+        if(produto.isEmpty()){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Produto não localizado");
+        }
+
+        var produtoModel = produto.get();
+        BeanUtils.copyProperties(produtosRecordDto, produtoModel);
+
+        return ResponseEntity.status(HttpStatus.OK).body(produtoRepositories.save(produtoModel));
+
+
+    }
 
 
 }
